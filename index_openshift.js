@@ -8,25 +8,12 @@ const
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
 
-//const https = require('https');
-//var fs = require('fs');
+const https = require('https');
 
-var server = require('https').createServer(app)
-var port = process.env.OPENSHIFT_NODEJS_PORT || 443  
-var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-server.listen(port, ip);
-console.log('listening now');
-
-//var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
-//console.log(privateKey);
-//var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
-//var credentials = {key: privateKey, cert: certificate};
-// 1) find out where certificates lay on server
-// 2) help1 https://github.com/expressjs/express/wiki/Migrating-from-2.x-to-3.x "application function"
-// 3) help2 https://docs.nodejitsu.com/articles/HTTP/servers/how-to-create-a-HTTPS-server/
+var PythonShell = require('python-shell');
 
 // Sets server port and logs message on success
-//app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
 
 // Creates the endpoint for our webhook 
 app.post('/garage_openshift', (req, res) => {  
@@ -65,8 +52,3 @@ app.post('/garage_openshift', (req, res) => {
   res.status(200).send(body);
   
 });
-
-
-
-
-
