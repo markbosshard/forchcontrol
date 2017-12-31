@@ -11,9 +11,9 @@ const
 //const https = require('https');
 //var fs = require('fs');
 
-server = require('http').createServer(app)
-port = process.env.OPENSHIFT_NODEJS_PORT || 8080  
-ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var server = require('http').createServer(app)
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080  
+var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 server.listen(port, ip);
 console.log('listening now');
 
