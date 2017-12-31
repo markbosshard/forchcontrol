@@ -19,6 +19,15 @@ app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
 app.post('/garage_openshift', (req, res) => {  
   let body = req.body;
   console.log(body);
+  
+  var answer = {
+    'speech': 'arack Hussein Obama II was the 44th and current President of the United States.',
+    'displayText': 'Barack Hussein Obama II was the 44th and current President of the United States, and the first African American to hold the office. Born in Honolulu, Hawaii, Obama is a graduate of Columbia University   and Harvard Law School, where ', 
+    'data': {'nothing': 'really'},
+    'contextOut': [],
+    'source': 'DuckDuckGo'
+  }
+  console.log("answer = " + answer);
 
   var http = require("http");
   var options = {
@@ -31,12 +40,14 @@ app.post('/garage_openshift', (req, res) => {
     }
   };
 
-  var req = http.request(options, function(res) {
-    console.log('Status: ' + res.statusCode);
-    console.log('Headers: ' + JSON.stringify(res.headers));
-    res.setEncoding('utf8');
-    res.on('data', function (body) {
+  var req = http.request(options, function(resb) {
+    console.log('Status: ' + resb.statusCode);
+    console.log('Headers: ' + JSON.stringify(resb.headers));
+    resb.setEncoding('utf8');
+    resb.on('data', function (body) {
       console.log('Body: ' + body);
+      res.header("Access-Control-Allow-Origin", "*");
+      res.status(200).send(answer);
     });
   });
 
@@ -48,7 +59,6 @@ app.post('/garage_openshift', (req, res) => {
   req.write('{"string": "Hello, World"}');
   req.end();
   
-  res.header("Access-Control-Allow-Origin", "*");
-  res.status(200).send(body);
+  
   
 });
