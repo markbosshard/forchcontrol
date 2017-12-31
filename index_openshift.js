@@ -15,6 +15,9 @@ var fs = require('fs');
 //console.log(privateKey);
 //var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 //var credentials = {key: privateKey, cert: certificate};
+// 1) find out where certificates lay on server
+// 2) help1 https://github.com/expressjs/express/wiki/Migrating-from-2.x-to-3.x "application function"
+// 3) help2 https://docs.nodejitsu.com/articles/HTTP/servers/how-to-create-a-HTTPS-server/
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
