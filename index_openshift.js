@@ -9,6 +9,7 @@ const
   app = express().use(bodyParser.json()); // creates express http server
 
 const https = require('https');
+var fs = require('fs');
 
 var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
 console.log(privateKey);
