@@ -8,8 +8,14 @@ const
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
 
-const https = require('https');
-var fs = require('fs');
+//const https = require('https');
+//var fs = require('fs');
+
+server = require('http').createServer(app)
+port = process.env.OPENSHIFT_NODEJS_PORT || 8080  
+ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+server.listen(port, ip);
+console.log('listening now');
 
 //var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
 //console.log(privateKey);
@@ -20,7 +26,7 @@ var fs = require('fs');
 // 3) help2 https://docs.nodejitsu.com/articles/HTTP/servers/how-to-create-a-HTTPS-server/
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
+//app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
 
 // Creates the endpoint for our webhook 
 app.post('/garage_openshift', (req, res) => {  
