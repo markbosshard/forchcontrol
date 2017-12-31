@@ -10,10 +10,13 @@ const
 
 const https = require('https');
 
-var PythonShell = require('python-shell');
+var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+console.log(privateKey);
+//var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+//var credentials = {key: privateKey, cert: certificate};
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 443, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
 
 // Creates the endpoint for our webhook 
 app.post('/garage_openshift', (req, res) => {  
