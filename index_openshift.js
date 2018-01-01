@@ -13,23 +13,37 @@ const https = require('https');
 var PythonShell = require('python-shell');
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 1338, () => console.log('webhook is listening'));
 
 // Creates the endpoint for our webhook 
 app.post('/garage_openshift', (req, res) => {  
   let body = req.body;
-  console.log(body);
-  console.log("action: " + body.result.action);
-  
+
+  // MAKE DIALOGFLOW HAPPY WITH A QUICK ANSWER
   var answer = {
-    'speech': 'arack Hussein Obama II was the 44th and current President of the United States.',
-    'displayText': 'Barack Hussein Obama II was the 44th and current President of the United States, and the first African American to hold the office. Born in Honolulu, Hawaii, Obama is a graduate of Columbia University   and Harvard Law School, where ', 
+    'speech': 'Okay, moment.',
+    'displayText': 'Okay, moment.', 
     'data': {'nothing': 'really'},
     'contextOut': [],
     'source': 'DuckDuckGo'
   }
   console.log("answer = " + answer);
+  res.header("Access-Control-Allow-Origin", "*");
+  res.status(200).send(answer);
 
+  decide_action(body);
+    
+});
+
+function decide_action(body) {
+  if (body.result.action == 'garage_openaction') {
+    command_garage();
+  }
+}
+
+
+function command_garage() {
+  console.log("in function");
   var http = require("http");
   var options = {
     hostname: 'markforch.dd-dns.de',
@@ -46,20 +60,12 @@ app.post('/garage_openshift', (req, res) => {
     console.log('Headers: ' + JSON.stringify(resb.headers));
     resb.setEncoding('utf8');
     resb.on('data', function (body) {
-      console.log('Body: ' + body);
-      res.header("Access-Control-Allow-Origin", "*");
-      res.status(200).send(answer);
+      console.log('BodyFromRaspy: ' + body);
     });
   });
 
   req.on('error', function(e) {
     console.log('problem with request: ' + e.message);
   });
-
-  // write data to request body
-  req.write('{"string": "Hello, World"}');
   req.end();
-  
-  
-  
-});
+}
