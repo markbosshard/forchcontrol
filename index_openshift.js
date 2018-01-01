@@ -19,6 +19,7 @@ app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
 app.post('/garage_openshift', (req, res) => {  
   let body = req.body;
   console.log(body);
+  console.log("action: " + body.result.action);
   
   var answer = {
     'speech': 'arack Hussein Obama II was the 44th and current President of the United States.',
