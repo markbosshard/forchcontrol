@@ -13,7 +13,7 @@ const https = require('https');
 var PythonShell = require('python-shell');
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1338, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 8080, () => console.log('webhook is listening'));
 
 // Creates the endpoint for our webhook 
 app.post('/garage_openshift', (req, res) => {  
@@ -36,15 +36,16 @@ app.post('/garage_openshift', (req, res) => {
 });
 
 function decide_action(body) {
+  var http = require("http");
   if (body.result.action == 'garage_openaction') {
-    command_garage();
+    command_garage(http);
+  } else if (body.result.action == 'watercooker_on') {
+    turnon_watercooker(http);
   }
 }
 
 
-function command_garage() {
-  console.log("in function");
-  var http = require("http");
+function command_garage(http) {
   var options = {
     hostname: 'markforch.dd-dns.de',
     port: 1337,
@@ -63,9 +64,30 @@ function command_garage() {
       console.log('BodyFromRaspy: ' + body);
     });
   });
-
   req.on('error', function(e) {
     console.log('problem with request: ' + e.message);
   });
   req.end();
+}
+
+function turnon_watercooker(http) {
+  var options = {
+    host: 'markforch.dd-dns.de',
+    port: 1337,
+    path: '/teekocher?onoroff=on'
+  };
+
+  var req = http.get(options, function(resc) {
+    // Buffer the body entirely for processing as a whole.
+    var bodyChunks = [];
+    resc.on('data', function(chunk) {
+      bodyChunks.push(chunk);
+    }).on('end', function() {
+      var body = Buffer.concat(bodyChunks);
+      console.log('BODYteekocherFromRaspy: ' + body);
+    })
+  });
+  req.on('error', function(e) {
+    console.log('ERROR: ' + e.message);
+  });
 }
